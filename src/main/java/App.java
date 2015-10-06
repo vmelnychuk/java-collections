@@ -1,7 +1,8 @@
-import utils.StopWatch;
+import usage.ListsUsage;
 
 public class App {
     public static void main(String[] args) {
-        System.out.print("Hello");
+
+        ListsUsage listsUsage = new ListsUsage();
     }
 }

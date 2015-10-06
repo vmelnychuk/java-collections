@@ -8,6 +8,8 @@ public class StopWatch {
     }
     public long stop() {
         long now = System.nanoTime();
-        return now - start;
+        long timeElapsed = now - start;
+        System.out.println("time elapsed: " + timeElapsed);
+        return timeElapsed;
     }
 }
