@@ -1,8 +1,8 @@
-import usage.ListsUsage;
+import lists.Container;
+import usage.TestExecutor;
 
 public class App {
     public static void main(String[] args) {
-
-        ListsUsage listsUsage = new ListsUsage();
+        TestExecutor.check(new Container());
     }
 }
