@@ -1,8 +1,8 @@
 import lists.ListContainer;
-import usage.TestExecutor;
+import usage.ListTestExecutor;
 
 public class App {
     public static void main(String[] args) {
-        TestExecutor.check(new ListContainer());
+        ListTestExecutor.check(new ListContainer());
     }
 }

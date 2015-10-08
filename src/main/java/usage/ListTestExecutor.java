@@ -4,8 +4,8 @@ import lists.ListContainer;
 
 import java.util.*;
 
-public abstract class TestExecutor {
-    public static final int LENGTH = 1_0000;
+public abstract class ListTestExecutor {
+    public static final int LENGTH = 1_0_000;
 
     public enum Operation {
         ADD("Add"), INSERT("Insert"), GET("Get"), NEXT("Next"), DELETE("Delete");
@@ -21,16 +21,15 @@ public abstract class TestExecutor {
         }
     }
 
-    private static Map<Operation, TestExecutor> tests = new HashMap<>();
+    private static Map<Operation, ListTestExecutor> tests = new HashMap<>();
     private static Random random = new Random();
     private static Map<String, Map<String, Long>> result = new HashMap<String, Map<String, Long>>();
-    private static long[][] normalizedResults;
     private static long[][] resultsArray;
     private static List<String> opsName;
     private static List<String> collsName;
 
     static {
-        tests.put(Operation.ADD, new TestExecutor() {
+        tests.put(Operation.ADD, new ListTestExecutor() {
             @Override
             public void executeMethod(ListContainer.ContainerType container) {
                 for(int i=0; i < LENGTH;i++) {
@@ -38,7 +37,7 @@ public abstract class TestExecutor {
                 }
             }
         });
-        tests.put(Operation.INSERT, new TestExecutor() {
+        tests.put(Operation.INSERT, new ListTestExecutor() {
             @Override
             public void executeMethod(ListContainer.ContainerType container) {
                 for(int i=0; i < LENGTH; i++) {
@@ -46,7 +45,7 @@ public abstract class TestExecutor {
                 }
             }
         });
-        tests.put(Operation.GET,new TestExecutor() {
+        tests.put(Operation.GET,new ListTestExecutor() {
             @Override
             public void executeMethod(ListContainer.ContainerType container) {
                 int b = 0;
@@ -55,7 +54,7 @@ public abstract class TestExecutor {
                 }
             }
         });
-        tests.put(Operation.NEXT,new TestExecutor() {
+        tests.put(Operation.NEXT,new ListTestExecutor() {
             @Override
             public void executeMethod(ListContainer.ContainerType container) {
                 int b = 0;
@@ -65,7 +64,7 @@ public abstract class TestExecutor {
                 }
             }
         });
-        tests.put(Operation.DELETE,new TestExecutor() {
+        tests.put(Operation.DELETE,new ListTestExecutor() {
             @Override
             public void executeMethod(ListContainer.ContainerType container) {
                 for(int i=0; i < LENGTH; i++) {
@@ -76,9 +75,9 @@ public abstract class TestExecutor {
     }
 
     public long execute(ListContainer.ContainerType container) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         executeMethod(container);
-        return System.currentTimeMillis() - startTime;
+        return System.nanoTime() - startTime;
     }
 
     public static void executeAll(ListContainer.ContainerType container) {
@@ -104,10 +103,10 @@ public abstract class TestExecutor {
     public static void printResults() {
         printHeader();
         for(String collectionName : result.keySet()) {
-            System.out.printf("|%11s |", collectionName);
+            System.out.printf("|%15s |", collectionName);
             Map<String, Long> operationResult = result.get(collectionName);
             for(String operation : operationResult.keySet()) {
-                System.out.printf("%8s |", operationResult.get(operation));
+                System.out.printf("%10s |", operationResult.get(operation) / 1000);
             }
             System.out.println();
         }
@@ -120,74 +119,13 @@ public abstract class TestExecutor {
         printHeader();
         Iterator<String> collIt = collsName.iterator();
         for(int i = 0; i < resultsArray.length;i++) {
-                System.out.printf("|%11s |", collIt.next());
+                System.out.printf("|%15s |", collIt.next());
                 for (int j = 0; j < resultsArray[i].length; j++) {
-                    System.out.printf("%8s |", resultsArray[i][j]);
+                    System.out.printf("%10s |", resultsArray[i][j]);
                 }
                 System.out.println();
         }
         printFooter();
-    }
-
-    //--------------------Print helpers
-
-    private static void printHeader() {
-        System.out.println("================================================================");
-        System.out.printf("|%11s |", "Collection");
-        for (String opName : getOperationsNames()) {
-            System.out.printf("%8s |", opName);
-        }
-        System.out.println();
-        System.out.println("================================================================");
-    }
-
-    private static void printFooter() {
-        System.out.println("================================================================");
-    }
-
-    //--------------------
-
-    // fix this
-    public static void normalizeResults() {
-        prepareResultsArray();
-        for(int col = 0; col < resultsArray[0].length; col++) {
-            int max_index_row = 0;
-            int max_index_col = 0;
-
-            int min_index_row = 0;
-            int min_index_col = 0;
-            for(int k = 0; k < 2; k++) {
-                for (int row = 0; row < resultsArray.length; row++) {
-                    if (k == 0) {
-                        if (resultsArray[row][col] >= resultsArray[max_index_row][max_index_col]) {
-                            max_index_row = row;
-                            max_index_col = col;
-                        }
-
-                        if (resultsArray[row][col] <= resultsArray[min_index_row][min_index_col]) {
-                            min_index_row = row;
-                            min_index_col = col;
-                        }
-                    }
-                    if(k == 1) {
-                        if (resultsArray[row][col] < resultsArray[max_index_row][max_index_col]
-                                && resultsArray[row][col] > resultsArray[min_index_row][min_index_col]) {
-                            resultsArray[row][col] = 0;
-                        }
-                        if ((resultsArray[row][col] == resultsArray[max_index_row][max_index_col])
-                                && row != max_index_row && col != max_index_col) {
-                            resultsArray[row][col] = -1;
-                        }
-                        if (resultsArray[row][col] == resultsArray[min_index_row][min_index_col]
-                                && row != min_index_row && col != min_index_col) {
-                            resultsArray[row][col] = 1;
-                        }
-                    }
-                }
-            }
-            resultsArray[max_index_row][max_index_col] = -1;
-            resultsArray[min_index_row][min_index_col] = 1;
-        }
     }
 
     private static void prepareResultsArray() {
@@ -215,4 +153,56 @@ public abstract class TestExecutor {
     private static List<String> getCollectionNames() {
         return new ArrayList<String>(result.keySet());
     }
+
+    private static void normalizeResults() {
+        prepareResultsArray();
+        for(int col = 0; col < resultsArray[0].length; col++) {
+            int max_index_row = 0;
+            int max_index_col = col;
+
+            int min_index_row = 0;
+            int min_index_col = col;
+            for(int k = 0; k < 2; k++) {
+                for (int row = 0; row < resultsArray.length; row++) {
+                    if (k == 0) {
+                        if (resultsArray[row][col] > resultsArray[max_index_row][max_index_col]) {
+                            max_index_row = row;
+                            max_index_col = col;
+                        }
+
+                        if (resultsArray[row][col] < resultsArray[min_index_row][min_index_col]) {
+                            min_index_row = row;
+                            min_index_col = col;
+                        }
+                    }
+                    if(k == 1) {
+                        if (resultsArray[row][col] < resultsArray[max_index_row][max_index_col]
+                                && resultsArray[row][col] > resultsArray[min_index_row][min_index_col]) {
+                            resultsArray[row][col] = 0;
+                        }
+                    }
+                }
+            }
+            resultsArray[max_index_row][max_index_col] = -1;
+            resultsArray[min_index_row][min_index_col] = 1;
+        }
+    }
+
+    //--------------------Print helpers
+
+    private static void printHeader() {
+        System.out.println("==============================================================================");
+        System.out.printf("|%15s |", "Collection");
+        for (String opName : getOperationsNames()) {
+            System.out.printf("%10s |", opName);
+        }
+        System.out.println();
+        System.out.println("==============================================================================");
+    }
+
+    private static void printFooter() {
+        System.out.println("==============================================================================");
+    }
+
+    //--------------------Print helpers
 }
