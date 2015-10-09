@@ -1,23 +1,25 @@
-package lists;
+package sets;
+
+import lists.ListContainer;
 
 import java.util.*;
 
-public class ListContainer {
+public class SetContainer {
     public enum ContainerType {
-        ARRAY_LIST(new ArrayList<Integer>(), "ArrayList"),
-        LINKED_LIST(new LinkedList<Integer>(), "LinkedList"),
-        VECTOR(new Vector<Integer>(), "Vector");
+        HASH_SET(new HashSet<Integer>(), "HashSet"),
+        LINKED_HASH_SET(new LinkedHashSet<Integer>(),"LinkedHashSet"),
+        TREE_SET(new TreeSet<Integer>(), "TreeSet");
 
-        private List list;
+        private Set set;
         private String name;
 
-        ContainerType(List<Integer> list, String name) {
-            this.list = list;
+        ContainerType(Set<Integer> set, String name) {
+            this.set = set;
             this.name = name;
         }
 
-        public List<Integer> getList() {
-            return list;
+        public Set<Integer> getSet() {
+            return set;
         }
 
         public String getName() {
@@ -27,7 +29,7 @@ public class ListContainer {
 
     private Map<String, ContainerType> containers = new HashMap<>();
 
-    public ListContainer() {
+    public SetContainer() {
         for(ContainerType type : ContainerType.values()) {
             containers.put(type.getName(), type);
         }

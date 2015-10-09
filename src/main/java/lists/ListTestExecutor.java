@@ -1,6 +1,4 @@
-package usage;
-
-import lists.ListContainer;
+package lists;
 
 import java.util.*;
 
