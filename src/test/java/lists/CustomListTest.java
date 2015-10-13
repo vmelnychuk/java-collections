@@ -32,14 +32,16 @@ public class CustomListTest {
         assertFalse(list.contains(new Integer(-400)));
         assertTrue(list.contains(new Integer(1)));
     }
-
+    //todo
     @Test
     public void testIterator() throws Exception {
     }
-
+    //todo
     @Test
     public void testToArray() throws Exception {
-
+        list.add(new Integer(1));
+        list.add(new Integer(2));
+        assertArrayEquals(new Object[] {new Integer(1), new Integer(2)}, list.toArray());
     }
 
     @Test
@@ -79,6 +81,7 @@ public class CustomListTest {
 
     }
 
+    //todo
     @Test
     public void testAddAll() throws Exception {
 
@@ -103,12 +106,12 @@ public class CustomListTest {
     public void testClear() throws Exception {
 
     }
-
+    //todo
     @Test
     public void testGet() throws Exception {
 
     }
-
+    //todo
     @Test
     public void testSet() throws Exception {
 

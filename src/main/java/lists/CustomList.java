@@ -35,7 +35,9 @@ public class CustomList<E> implements List<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] copyOfArray = new Object[size];
+        System.arraycopy(array, 0, copyOfArray, 0, size);
+        return copyOfArray;
     }
 
     @Override
